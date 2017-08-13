@@ -12,18 +12,14 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback,
-        GoogleApiClient.ConnectionCallbacks,
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 
@@ -33,6 +29,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
     Marker mCurrLocationMarker;
+    private MainFragment mainFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +39,33 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         getSupportActionBar().setTitle("Bootcamp Locator");
 
-        mapFrag = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mapFrag.getMapAsync(this);
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addApi(LocationServices.API)
+                .build();
+
+
+        mainFragment = (MainFragment) getSupportFragmentManager().findFragmentById(R.id.container_main);
+        if (mainFragment == null)
+        {
+            mainFragment = MainFragment.newInstance();
+            getSupportFragmentManager().beginTransaction().add(R.id.container_main, mainFragment).commit();
+
+        }
+       // mapFrag = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+      //  mapFrag.getMapAsync(this);
+    }
+
+    @Override
+    protected void onStart() {
+        mGoogleApiClient.connect();
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        mGoogleApiClient.disconnect();
+        super.onStop();
     }
 
     @Override
@@ -55,28 +78,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mGoogleMap = googleMap;
-        mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-
-
-        // Add a marker in Sydney and move the camera
-        mGoogleMap.setMyLocationEnabled(true);
-
-        //add this here:
-        buildGoogleApiClient();
-
-    }
-
-    protected synchronized void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-        mGoogleApiClient.connect();
-    }
 
     @Override
     public void onConnected(Bundle bundle) {
@@ -112,22 +113,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         markerOptions.position(latLng);
         markerOptions.title("Current Location");
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-        mCurrLocationMarker = mGoogleMap.addMarker(markerOptions);
+       // mCurrLocationMarker = mGoogleMap.addMarker(markerOptions);
+        mainFragment.setUserMarkers(new LatLng(location.getLatitude(), location.getLongitude()));
 
 
-        CameraPosition position = CameraPosition.builder()
-                .target( new LatLng( location.getLatitude(),
-                        location.getLongitude() ) )
-                .zoom( 16 )
-                .bearing( 70 )
-                .tilt( 20 )
-                .build();
 
-        mGoogleMap.animateCamera( CameraUpdateFactory
-                .newCameraPosition( position ), null );
+     //   mGoogleMap.animateCamera( CameraUpdateFactory
+          //      .newCameraPosition( position ), null );
 
-        mGoogleMap.setTrafficEnabled( true );
-        mGoogleMap.getUiSettings().setZoomControlsEnabled( true );
+      //  mGoogleMap.setTrafficEnabled( true );
+      //  mGoogleMap.getUiSettings().setZoomControlsEnabled( true );
 
     }
 

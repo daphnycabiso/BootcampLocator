@@ -1,34 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        xmlns:map="http://schemas.android.com/apk/res-auto"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/map"
-        tools:context=".MainActivity"
-        android:name="com.google.android.gms.maps.SupportMapFragment"/>
+        android:id="@+id/container_main">
 
-    <EditText
-        android:id="@+id/searchView1"
-        android:layout_width="270dp"
-        android:layout_height="38dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="18dp"
-        android:layout_marginTop="14dp"
-        android:hint="   Enter ZIP Code  "
-        android:textColor="@android:color/black"
-        android:background="@android:color/white"
-        android:drawableLeft="@drawable/search"
-        android:drawableRight="@drawable/mic"
-        android:layout_gravity="top">
-    </EditText>
+    </FrameLayout>
 
 
 
-</FrameLayout>
+</LinearLayout>
