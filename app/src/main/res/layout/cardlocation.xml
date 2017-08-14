@@ -23,7 +23,7 @@
                 android:id="@+id/location_title"
                 android:layout_width="221dp"
                 android:layout_height="wrap_content"
-                android:text="Devslopes Tower"
+                android:text="Place"
                 android:textColor="#2F2F2F"
                 android:textSize="18dp" />
 
@@ -32,7 +32,7 @@
                 android:layout_width="218dp"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
-                android:text="75 Strathaven Drive Unit 1, Mississaugam ON"
+                android:text="Lapu-Lapu City, Cebu"
                 android:textSize="16dp" />
         </LinearLayout>
 

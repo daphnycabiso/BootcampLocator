@@ -19,9 +19,11 @@ public class DataService {
 
     public ArrayList<Devslopes> getNearBootCampLocations(int zipcode){
         ArrayList<Devslopes> bootCamps =new ArrayList<>();
-        bootCamps.add(new Devslopes( 10.3048171f , 123.9473218f, "Tojong Inc. Maternity and General Hospital", "Lapu-Lapu City", "img"));
-        bootCamps.add(new Devslopes( 10.309251f,123.948099f, "Lapu-Lapu City Central School", "Lapu-Lapu City", "img"));
-        bootCamps.add(new Devslopes( 10.309774f,123.948707f, "OPON Kindergarten and Nursery School", "Lapu-Lapu City", "img"));
+        bootCamps.add(new Devslopes( 10.3217381f , 123.8998818f, "Valentino Private Pool", "Lapu-Lapu City", "img"));
+        bootCamps.add(new Devslopes( 10.3196824f,123.8998121f, "Sala Piano Museum", "Lapu-Lapu City", "img"));
+        bootCamps.add(new Devslopes( 10.3186325f,123.9004658f, "Golden Peak Hotel", "Lapu-Lapu City", "img"));
         return bootCamps;
     }
+
+
 }

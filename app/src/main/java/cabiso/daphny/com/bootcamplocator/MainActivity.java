@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     Location mLastLocation;
     Marker mCurrLocationMarker;
     private MainFragment mainFragment;
-
+    public String zip = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

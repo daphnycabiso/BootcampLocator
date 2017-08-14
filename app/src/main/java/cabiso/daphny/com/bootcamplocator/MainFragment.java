@@ -1,6 +1,8 @@
 package cabiso.daphny.com.bootcamplocator;
 
 import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -19,7 +22,10 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Lenovo on 8/13/2017.
@@ -34,10 +40,8 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
 
 
     public MainFragment() {
-        // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
     public static MainFragment newInstance() {
         MainFragment fragment = new MainFragment();
         return fragment;
@@ -69,24 +73,26 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
                     commit();
         }
 
-        final EditText zipText=(EditText) v.findViewById(R.id.zip_text);
+        final EditText zipText = (EditText) v.findViewById(R.id.zip_text);
         zipText.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if((event.getAction()==KeyEvent.ACTION_DOWN) && keyCode== KeyEvent.KEYCODE_ENTER){
-
-                    String text = zipText.getText().toString();
-                    int zip = Integer.parseInt(text);
-
+                //Looking for input on the searchbar and checking when enter is pressed...
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
+                    //perform action on key pressed...
+                    zip = zipText.getText().toString();
+                    Toast.makeText(getContext(), zip, Toast.LENGTH_SHORT).show();
+                    //Dismiss the keyboard
                     InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(zipText.getWindowToken(),0);
+                    imm.hideSoftInputFromWindow(zipText.getWindowToken(), 0);
+                    updateMapForZip(zip);
                     showList();
-                    updateMapForZipCode(zip);
                     return true;
                 }
                 return false;
             }
         });
+        //Show the locations recycler view/list to the user when the user enters a zip...
         hideList();
         return v;
 
@@ -104,7 +110,16 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
             mGoogleMap.addMarker(userMarker);
             Log.v("Hey", "Current Location");
         }
-
+        //geocoding to find zip of current users location retrieved from the phone...
+        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+            String postal_code = addresses.get(0).getPostalCode();
+            updateMapForZip(postal_code);
+        }
+        catch (IOException exception){
+            //catching IO.
+        }
 
         mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
 
@@ -113,12 +128,16 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
     }
 
 
-    private void updateMapForZipCode(int zipcode){
-        ArrayList<Devslopes> locations=DataService.getInstance().getNearBootCampLocations(zipcode);
-        for (int i=0; i<locations.size();i++){
-            Devslopes loc=locations.get(i);
-            MarkerOptions marker= new MarkerOptions().position(new LatLng(loc.getLatitude(),loc.getLongitude()));
-            marker.title(loc.getLocationTitle());
+    private void updateMapForZip(String zip_code){
+
+        Toast.makeText(getContext(), zip_code, Toast.LENGTH_SHORT).show();
+        ArrayList<Devslopes> locations = DataService.getInstance().getNearBootCampLocations(Integer.parseInt(zip_code));
+
+        for (int x = 0; x < locations.size(); x++){
+            Devslopes loc = locations.get(x);
+            MarkerOptions marker = new MarkerOptions().position(new LatLng(loc.getLatitude(), loc.getLongitude()));
+            marker.title(loc.getLocationTittle());
+            marker.snippet(loc.getLocationAddress());
             marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin));
             mGoogleMap.addMarker(marker);
         }
