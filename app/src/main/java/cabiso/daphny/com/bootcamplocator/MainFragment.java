@@ -1,8 +1,6 @@
 package cabiso.daphny.com.bootcamplocator;
 
 import android.content.Context;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -22,10 +20,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by Lenovo on 8/13/2017.
@@ -81,7 +76,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
                     //perform action on key pressed...
                     zip = zipText.getText().toString();
-                    Toast.makeText(getContext(), zip, Toast.LENGTH_SHORT).show();
+                    //    Toast.makeText(getContext(), zip, Toast.LENGTH_SHORT).show();
                     //Dismiss the keyboard
                     InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(zipText.getWindowToken(), 0);
@@ -111,7 +106,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
             Log.v("Hey", "Current Location");
         }
         //geocoding to find zip of current users location retrieved from the phone...
-        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+      /*  Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
         try {
             List<Address> addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
             String postal_code = addresses.get(0).getPostalCode();
@@ -119,7 +114,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
         }
         catch (IOException exception){
             //catching IO.
-        }
+        }*/
 
         mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
 
@@ -128,10 +123,10 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
     }
 
 
-    private void updateMapForZip(String zip_code){
+    private void updateMapForZip(String zipcode){
 
-        Toast.makeText(getContext(), zip_code, Toast.LENGTH_SHORT).show();
-        ArrayList<Devslopes> locations = DataService.getInstance().getNearBootCampLocations(Integer.parseInt(zip_code));
+        Toast.makeText(getContext(), zipcode, Toast.LENGTH_SHORT).show();
+        ArrayList<Devslopes> locations = DataService.getInstance().getNearBootCampLocations(Integer.parseInt(zipcode));
 
         for (int x = 0; x < locations.size(); x++){
             Devslopes loc = locations.get(x);

@@ -19,9 +19,9 @@ public class DataService {
 
     public ArrayList<Devslopes> getNearBootCampLocations(int zipcode){
         ArrayList<Devslopes> bootCamps =new ArrayList<>();
-        bootCamps.add(new Devslopes( 10.3217381f , 123.8998818f, "Valentino Private Pool", "Lapu-Lapu City", "img"));
-        bootCamps.add(new Devslopes( 10.3196824f,123.8998121f, "Sala Piano Museum", "Lapu-Lapu City", "img"));
-        bootCamps.add(new Devslopes( 10.3186325f,123.9004658f, "Golden Peak Hotel", "Lapu-Lapu City", "img"));
+        bootCamps.add(new Devslopes( 10.292315f , 123.864007f, "Siege Paintball Cebu", "Cebu City", "img"));
+        bootCamps.add(new Devslopes( 10.2908704f,123.8614377f, "USJR Coliseum", "Cebu City", "img"));
+        bootCamps.add(new Devslopes( 10.2898032f,123.8597002f, "Gear Up Cebu", "Cebu City", "img"));
         return bootCamps;
     }
 
